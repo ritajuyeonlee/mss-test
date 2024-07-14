@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -97,12 +98,22 @@ public class MerchandiseControllerTest {
         BDDMockito.given(merchandiseService.modifyMerchandise(merchandiseId, requestDto)).willReturn(responseDto);
 
 
-        mockMvc.perform(put("/merchandise/{id}",merchandiseId)
+        mockMvc.perform(put("/merchandise/{id}", merchandiseId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content))
                 .andExpect(status().isOk());
 
 
+    }
+
+
+    @Test
+    @DisplayName("상품 삭제 API")
+    void deleteMerchandiseTest() throws Exception {
+        Long merchandiseId = 1L;
+
+        mockMvc.perform(delete("/merchandise/{id}", merchandiseId))
+                .andExpect(status().isOk());
     }
 
 

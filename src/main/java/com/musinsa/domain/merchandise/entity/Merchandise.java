@@ -44,7 +44,7 @@ public class Merchandise extends BaseEntity {
 
 
     public static Merchandise of(Category category, BigDecimal price, String brand) {
-        if (category == null || Objects.equals(price, BigDecimal.ZERO) || brand == null) {
+        if (category == null || Objects.equals(price, BigDecimal.ZERO) || price == null || brand == null) {
             throw new RequiredInformationBlankException();
         } else {
             return Merchandise.builder()
@@ -60,5 +60,6 @@ public class Merchandise extends BaseEntity {
         category = requestDto.getCategory();
         price = requestDto.getPrice();
         brand = requestDto.getBrand();
+        modify();
     }
 }

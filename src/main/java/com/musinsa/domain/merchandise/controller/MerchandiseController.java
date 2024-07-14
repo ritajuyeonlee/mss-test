@@ -7,6 +7,7 @@ import com.musinsa.domain.merchandise.dto.response.ModifyMerchandiseResponseDto;
 import com.musinsa.domain.merchandise.service.MerchandiseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -36,6 +37,12 @@ public class MerchandiseController {
             @RequestBody ModifyMerchandiseRequestDto modifyMerchandiseRequestDto
     ) {
         return merchandiseService.modifyMerchandise(id, modifyMerchandiseRequestDto);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteMerchandise(@PathVariable Long id) {
+        merchandiseService.deleteMerchandise(id);
     }
 
 

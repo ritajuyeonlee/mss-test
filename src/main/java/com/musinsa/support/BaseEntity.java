@@ -1,11 +1,11 @@
 package com.musinsa.support;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -14,18 +14,20 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity {
     @CreatedDate
-    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @Column
-    private LocalDateTime updatedAt;
+    private LocalDateTime modifiedAt;
 
-    @Column
     private LocalDateTime deletedAt;
+
+    public void modify() {
+        modifiedAt = LocalDateTime.now();
+    }
 
     public void delete() {
         deletedAt = LocalDateTime.now();

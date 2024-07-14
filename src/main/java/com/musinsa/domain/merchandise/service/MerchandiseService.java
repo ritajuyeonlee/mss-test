@@ -36,4 +36,10 @@ public class MerchandiseService {
                 .brand(merchandise.getBrand())
                 .build();
     }
+
+    @Transactional
+    public void deleteMerchandise(Long id) {
+        Merchandise merchandise = merchandiseRepository.findById(id).orElseThrow(MerchandiseNotExistException::new);
+        merchandise.delete();
+    }
 }
