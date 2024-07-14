@@ -1,6 +1,5 @@
 package com.musinsa.domain.merchandise.dto.request;
 
-import com.musinsa.domain.merchandise.entity.Merchandise;
 import com.musinsa.enumerable.Category;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
@@ -10,7 +9,7 @@ import java.math.BigDecimal;
 
 @Getter
 @Builder
-public class CreateMerchandiseRequestDto {
+public class ModifyMerchandiseRequestDto {
 
     @NotBlank(message = "category is required")
     private Category category;
@@ -21,7 +20,4 @@ public class CreateMerchandiseRequestDto {
     @NotBlank(message = "brand is required")
     private String brand;
 
-    public Merchandise toEntity() {
-        return Merchandise.of(category, price, brand);
-    }
 }

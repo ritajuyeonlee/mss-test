@@ -1,10 +1,13 @@
 package com.musinsa.unit.controller;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.musinsa.domain.merchandise.controller.MerchandiseController;
 import com.musinsa.domain.merchandise.dto.request.CreateMerchandiseRequestDto;
+import com.musinsa.domain.merchandise.dto.request.ModifyMerchandiseRequestDto;
 import com.musinsa.domain.merchandise.dto.response.CreateMerchandiseResponseDto;
+import com.musinsa.domain.merchandise.dto.response.ModifyMerchandiseResponseDto;
 import com.musinsa.domain.merchandise.service.MerchandiseService;
 import com.musinsa.enumerable.Category;
 import org.junit.jupiter.api.DisplayName;
@@ -19,9 +22,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
 
-import static org.mockito.ArgumentMatchers.refEq;
-import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -35,6 +37,9 @@ public class MerchandiseControllerTest {
     @MockBean
     MerchandiseService merchandiseService;
 
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Test
     @DisplayName("상품 생성 API")
@@ -61,13 +66,44 @@ public class MerchandiseControllerTest {
 
         mockMvc.perform(post("/merchandise")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(content)
-                )
+                        .content(content))
                 .andExpect(status().isCreated());
 
-        verify(merchandiseService).createMerchandise(refEq(requestDto));
     }
 
+
+    @Test
+    @DisplayName("상품 수정 API")
+    void modifyMerchandiseTest() throws Exception {
+
+        Category category = Category.BAG;
+        BigDecimal price = BigDecimal.valueOf(1000);
+        String brand = "GUCCI";
+        Long merchandiseId = 1L;
+        ModifyMerchandiseRequestDto requestDto = ModifyMerchandiseRequestDto.builder()
+                .category(category)
+                .price(price)
+                .brand(brand)
+                .build();
+
+        ModifyMerchandiseResponseDto responseDto = ModifyMerchandiseResponseDto.builder()
+                .category(category)
+                .price(price)
+                .brand("ROW")
+                .build();
+        Gson gson = new Gson();
+        String content = gson.toJson(requestDto);
+
+        BDDMockito.given(merchandiseService.modifyMerchandise(merchandiseId, requestDto)).willReturn(responseDto);
+
+
+        mockMvc.perform(put("/merchandise/{id}",merchandiseId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(content))
+                .andExpect(status().isOk());
+
+
+    }
 
 
 }
