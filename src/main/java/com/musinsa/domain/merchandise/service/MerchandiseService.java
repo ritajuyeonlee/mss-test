@@ -22,6 +22,7 @@ public class MerchandiseService {
         return CreateMerchandiseResponseDto.builder().id(merchandise.getId()).build();
     }
 
+    @Transactional
     public ModifyMerchandiseResponseDto modifyMerchandise(
             Long id,
             ModifyMerchandiseRequestDto modifyMerchandiseRequestDto) {
