@@ -30,6 +30,14 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok:1.18.32")
     compileOnly("org.projectlombok:lombok:1.18.32")
 
+    implementation("com.querydsl:querydsl-jpa:5.0.0:jakarta")
+    implementation("com.querydsl:querydsl-apt:5.0.0")
+    implementation("com.querydsl:querydsl-core:5.0.0")
+    implementation("com.querydsl:querydsl-sql:5.0.0")
+    annotationProcessor( "com.querydsl:querydsl-apt:5.0.0:jakarta")
+    annotationProcessor( "jakarta.annotation:jakarta.annotation-api")
+    annotationProcessor("jakarta.persistence:jakarta.persistence-api")
+
 
     implementation("jakarta.validation:jakarta.validation-api:3.0.2")
     implementation("org.hibernate:hibernate-validator:6.1.0.Final")
@@ -58,4 +66,13 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+}
+val querydslSrcDir = "src/main/generated"
+
+tasks.named<Delete>("clean") {
+    delete(file(querydslSrcDir))
+}
+
+tasks.withType<JavaCompile> {
+    options.generatedSourceOutputDirectory.set(file(querydslSrcDir))
 }
