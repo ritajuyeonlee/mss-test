@@ -1,7 +1,7 @@
 package com.musinsa.domain.merchandise.repository;
 
 import com.musinsa.domain.merchandise.dto.response.GetMerchandiseDto;
-import com.musinsa.domain.merchandise.dto.response.GetOneBrandCombinationResponseDto;
+import com.musinsa.domain.merchandise.dto.response.GetPriceAndCategoryDto;
 import com.musinsa.domain.merchandise.entity.QMerchandise;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
@@ -46,7 +46,26 @@ public class MerchandiseQueryRepositoryImpl implements MerchandiseQueryRepositor
 
 
     @Override
-    public GetOneBrandCombinationResponseDto getOneBrandCombination(String brand) {
-        return null;
+    public List<GetPriceAndCategoryDto> getLowestPriceCombinationByBrand(String brand) {
+        QMerchandise original = QMerchandise.merchandise;
+        QMerchandise compare = new QMerchandise("compare");
+
+        return jpaQueryFactory
+                .select(
+                        Projections.fields(
+                                GetPriceAndCategoryDto.class,
+                                original.category,
+                                original.price.min().as("price")
+                        )
+                )
+                .from(original)
+                .where(original.price.eq(
+                        JPAExpressions.select(compare.price.min())
+                                .from(compare)
+                                .where(compare.category.eq(original.category),
+                                        compare.brand.eq(brand))
+                ))
+                .groupBy(original.category)
+                .fetch();
     }
 }

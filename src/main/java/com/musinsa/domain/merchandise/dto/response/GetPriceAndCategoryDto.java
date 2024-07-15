@@ -6,10 +6,8 @@ import lombok.Getter;
 import java.math.BigDecimal;
 
 @Getter
-public class GetMerchandiseDto {
-
+public class GetPriceAndCategoryDto {
     private Category category;
     private BigDecimal price;
-    private String brand;
 
 }
