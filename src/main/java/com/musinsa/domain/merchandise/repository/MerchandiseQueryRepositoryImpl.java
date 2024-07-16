@@ -12,6 +12,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+import static com.musinsa.domain.merchandise.entity.QMerchandise.merchandise;
+
 @RequiredArgsConstructor
 @Component
 public class MerchandiseQueryRepositoryImpl implements MerchandiseQueryRepository {
@@ -19,7 +21,7 @@ public class MerchandiseQueryRepositoryImpl implements MerchandiseQueryRepositor
     private final JPAQueryFactory jpaQueryFactory;
 
     public List<GetMerchandiseDto> getLowestPriceOfEachCategory() {
-        QMerchandise original = QMerchandise.merchandise;
+        QMerchandise original = merchandise;
         QMerchandise compare = new QMerchandise("compare");
 
         return jpaQueryFactory
@@ -47,7 +49,7 @@ public class MerchandiseQueryRepositoryImpl implements MerchandiseQueryRepositor
 
     @Override
     public List<GetPriceAndCategoryDto> getLowestPriceCombinationByBrand(String brand) {
-        QMerchandise original = QMerchandise.merchandise;
+        QMerchandise original = merchandise;
         QMerchandise compare = new QMerchandise("compare");
 
         return jpaQueryFactory
@@ -66,6 +68,15 @@ public class MerchandiseQueryRepositoryImpl implements MerchandiseQueryRepositor
                                         compare.brand.eq(brand))
                 ))
                 .groupBy(original.category)
+                .fetch();
+    }
+
+    @Override
+    public List<String> getAllBrands() {
+        return jpaQueryFactory
+                .select(merchandise.brand)
+                .distinct()
+                .from(merchandise)
                 .fetch();
     }
 }

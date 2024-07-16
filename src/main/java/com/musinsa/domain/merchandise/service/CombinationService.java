@@ -1,15 +1,18 @@
 package com.musinsa.domain.merchandise.service;
 
-import com.musinsa.domain.merchandise.dto.response.GetLowestPriceCombinationByBrandResponseDto;
+import com.musinsa.domain.merchandise.dto.response.GetLowestPriceCombinationByOneBrandResponseDto;
 import com.musinsa.domain.merchandise.dto.response.GetLowestPriceCombinationResponseDto;
 import com.musinsa.domain.merchandise.dto.response.GetMerchandiseDto;
 import com.musinsa.domain.merchandise.dto.response.GetPriceAndCategoryDto;
+import com.musinsa.domain.merchandise.dto.response.LowestPriceCombinationByBrandDto;
 import com.musinsa.domain.merchandise.repository.MerchandiseQueryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -30,14 +33,29 @@ public class CombinationService {
     }
 
     @Transactional(readOnly = true)
-    public GetLowestPriceCombinationByBrandResponseDto getLowestPriceCombinationByBrand(String brand) {
-        List<GetPriceAndCategoryDto> priceAndCategories =   merchandiseQueryRepository.getLowestPriceCombinationByBrand(brand);
-        BigDecimal totalPrice = priceAndCategories.stream().map(GetPriceAndCategoryDto::getPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
+    public GetLowestPriceCombinationByOneBrandResponseDto getLowestPriceCombinationByOneBrand() {
 
-        return GetLowestPriceCombinationByBrandResponseDto.builder()
-                .brand(brand)
-                .priceAndCategories(priceAndCategories)
-                .totalPrice(totalPrice)
+        List<String> allBrands = merchandiseQueryRepository.getAllBrands();
+
+        ArrayList<LowestPriceCombinationByBrandDto> lowestPriceCombinationByBrands = new ArrayList<>();
+        for (String brand : allBrands) {
+            List<GetPriceAndCategoryDto> priceAndCategorys = merchandiseQueryRepository.getLowestPriceCombinationByBrand(brand);
+            BigDecimal totalPrice = priceAndCategorys.stream().map(GetPriceAndCategoryDto::getPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
+            lowestPriceCombinationByBrands.add(LowestPriceCombinationByBrandDto.builder()
+                    .brand(brand)
+                    .priceAndCategories(priceAndCategorys)
+                    .totalPrice(totalPrice)
+                    .build());
+        }
+        BigDecimal minimumTotal = lowestPriceCombinationByBrands.stream()
+                .map(LowestPriceCombinationByBrandDto::getTotalPrice)
+                .min(Comparator.naturalOrder())
+                .orElse(BigDecimal.ZERO);
+
+        lowestPriceCombinationByBrands.removeIf(it -> it.getTotalPrice().compareTo(minimumTotal) > 0);
+
+        return GetLowestPriceCombinationByOneBrandResponseDto.builder()
+                .lowestPriceCombinationByBrands(lowestPriceCombinationByBrands)
                 .build();
 
     }

@@ -2,10 +2,11 @@ package com.musinsa.unit.controller;
 
 
 import com.musinsa.domain.merchandise.controller.CombinationController;
-import com.musinsa.domain.merchandise.dto.response.GetLowestPriceCombinationByBrandResponseDto;
+import com.musinsa.domain.merchandise.dto.response.GetLowestPriceCombinationByOneBrandResponseDto;
 import com.musinsa.domain.merchandise.dto.response.GetLowestPriceCombinationResponseDto;
 import com.musinsa.domain.merchandise.dto.response.GetMerchandiseDto;
 import com.musinsa.domain.merchandise.dto.response.GetPriceAndCategoryDto;
+import com.musinsa.domain.merchandise.dto.response.LowestPriceCombinationByBrandDto;
 import com.musinsa.domain.merchandise.service.CombinationService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -67,17 +68,21 @@ public class CombinationControllerTest {
         String brand = "JAQ";
         BigDecimal totalPrice = BigDecimal.valueOf(1000);
         List<GetPriceAndCategoryDto> priceAndCategories = new ArrayList<>();
+        List<LowestPriceCombinationByBrandDto> lowestPriceCombinationByBrands = List.of(
+                LowestPriceCombinationByBrandDto.builder()
+                        .totalPrice(totalPrice)
+                        .priceAndCategories(priceAndCategories)
+                        .brand(brand)
+                        .build()
+        );
 
-        GetLowestPriceCombinationByBrandResponseDto responseDto = GetLowestPriceCombinationByBrandResponseDto.builder()
-                .brand(brand)
-                .priceAndCategories(priceAndCategories)
-                .totalPrice(totalPrice)
+        GetLowestPriceCombinationByOneBrandResponseDto responseDto = GetLowestPriceCombinationByOneBrandResponseDto.builder()
+                .lowestPriceCombinationByBrands(lowestPriceCombinationByBrands)
                 .build();
 
-        BDDMockito.given(combinationService.getLowestPriceCombinationByBrand(brand)).willReturn(responseDto);
+        BDDMockito.given(combinationService.getLowestPriceCombinationByOneBrand()).willReturn(responseDto);
 
-
-        mockMvc.perform(get("/combination/lowest-price/{brand}", brand)
+        mockMvc.perform(get("/combination/lowest-price/one-brand")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk());

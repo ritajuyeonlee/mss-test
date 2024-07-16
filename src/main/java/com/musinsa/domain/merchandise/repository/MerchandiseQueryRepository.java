@@ -10,4 +10,6 @@ public interface MerchandiseQueryRepository  {
     List<GetMerchandiseDto> getLowestPriceOfEachCategory();
 
     List<GetPriceAndCategoryDto> getLowestPriceCombinationByBrand(String brand);
+
+    List<String> getAllBrands();
 }
