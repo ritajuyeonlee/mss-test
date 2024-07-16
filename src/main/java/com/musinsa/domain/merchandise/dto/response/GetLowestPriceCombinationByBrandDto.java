@@ -8,7 +8,7 @@ import java.util.List;
 
 @Getter
 @Builder
-public class LowestPriceCombinationByBrandDto {
+public class GetLowestPriceCombinationByBrandDto {
     String brand;
     List<GetPriceAndCategoryDto> priceAndCategories;
     BigDecimal totalPrice;

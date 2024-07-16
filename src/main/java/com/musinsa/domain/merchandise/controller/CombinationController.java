@@ -18,16 +18,16 @@ public class CombinationController {
     private final CombinationService combinationService;
 
     @GetMapping("/lowest-price")
-       @ResponseStatus(HttpStatus.OK)
-       public GetLowestPriceCombinationResponseDto getLowestPriceCombination() {
-           return combinationService.getLowestPriceCombination();
+    @ResponseStatus(HttpStatus.OK)
+    public GetLowestPriceCombinationResponseDto getLowestPriceCombination() {
+        return combinationService.getLowestPriceCombination();
 
-       }
+    }
 
-       @GetMapping("/lowest-price/one-brand")
-       public GetLowestPriceCombinationByOneBrandResponseDto getLowestPriceCombinationByOneBrand() {
-           return combinationService.getLowestPriceCombinationByOneBrand();
-       }
+    @GetMapping("/lowest-price/one-brand")
+    public GetLowestPriceCombinationByOneBrandResponseDto getLowestPriceCombinationByOneBrand() {
+        return combinationService.getLowestPriceCombinationByOneBrand();
+    }
 
 
 }

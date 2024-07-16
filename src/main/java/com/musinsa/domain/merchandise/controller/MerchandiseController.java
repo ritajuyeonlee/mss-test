@@ -3,11 +3,14 @@ package com.musinsa.domain.merchandise.controller;
 import com.musinsa.domain.merchandise.dto.request.CreateMerchandiseRequestDto;
 import com.musinsa.domain.merchandise.dto.request.ModifyMerchandiseRequestDto;
 import com.musinsa.domain.merchandise.dto.response.CreateMerchandiseResponseDto;
+import com.musinsa.domain.merchandise.dto.response.GetCategoryHighestLowestPriceDto;
 import com.musinsa.domain.merchandise.dto.response.ModifyMerchandiseResponseDto;
 import com.musinsa.domain.merchandise.service.MerchandiseService;
+import com.musinsa.enumerable.Category;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -46,6 +49,14 @@ public class MerchandiseController {
     }
 
 
+    @GetMapping("/category/highest-lowest-price")
+    @ResponseStatus(HttpStatus.OK)
+    public GetCategoryHighestLowestPriceDto getCategoryHighestLowestPrice(
+            Category category
+    ) {
+        return merchandiseService.getCategoryHighestLowestPrice(category);
+
+    }
 
 
 }

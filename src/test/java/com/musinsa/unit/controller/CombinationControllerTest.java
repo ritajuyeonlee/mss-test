@@ -2,11 +2,11 @@ package com.musinsa.unit.controller;
 
 
 import com.musinsa.domain.merchandise.controller.CombinationController;
+import com.musinsa.domain.merchandise.dto.response.GetLowestPriceCombinationByBrandDto;
 import com.musinsa.domain.merchandise.dto.response.GetLowestPriceCombinationByOneBrandResponseDto;
 import com.musinsa.domain.merchandise.dto.response.GetLowestPriceCombinationResponseDto;
 import com.musinsa.domain.merchandise.dto.response.GetMerchandiseDto;
 import com.musinsa.domain.merchandise.dto.response.GetPriceAndCategoryDto;
-import com.musinsa.domain.merchandise.dto.response.LowestPriceCombinationByBrandDto;
 import com.musinsa.domain.merchandise.service.CombinationService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -68,8 +68,8 @@ public class CombinationControllerTest {
         String brand = "JAQ";
         BigDecimal totalPrice = BigDecimal.valueOf(1000);
         List<GetPriceAndCategoryDto> priceAndCategories = new ArrayList<>();
-        List<LowestPriceCombinationByBrandDto> lowestPriceCombinationByBrands = List.of(
-                LowestPriceCombinationByBrandDto.builder()
+        List<GetLowestPriceCombinationByBrandDto> lowestPriceCombinationByBrands = List.of(
+                GetLowestPriceCombinationByBrandDto.builder()
                         .totalPrice(totalPrice)
                         .priceAndCategories(priceAndCategories)
                         .brand(brand)

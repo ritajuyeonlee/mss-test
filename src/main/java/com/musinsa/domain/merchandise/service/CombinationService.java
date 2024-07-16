@@ -1,10 +1,10 @@
 package com.musinsa.domain.merchandise.service;
 
+import com.musinsa.domain.merchandise.dto.response.GetLowestPriceCombinationByBrandDto;
 import com.musinsa.domain.merchandise.dto.response.GetLowestPriceCombinationByOneBrandResponseDto;
 import com.musinsa.domain.merchandise.dto.response.GetLowestPriceCombinationResponseDto;
 import com.musinsa.domain.merchandise.dto.response.GetMerchandiseDto;
 import com.musinsa.domain.merchandise.dto.response.GetPriceAndCategoryDto;
-import com.musinsa.domain.merchandise.dto.response.LowestPriceCombinationByBrandDto;
 import com.musinsa.domain.merchandise.repository.MerchandiseQueryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,18 +37,18 @@ public class CombinationService {
 
         List<String> allBrands = merchandiseQueryRepository.getAllBrands();
 
-        ArrayList<LowestPriceCombinationByBrandDto> lowestPriceCombinationByBrands = new ArrayList<>();
+        ArrayList<GetLowestPriceCombinationByBrandDto> lowestPriceCombinationByBrands = new ArrayList<>();
         for (String brand : allBrands) {
             List<GetPriceAndCategoryDto> priceAndCategorys = merchandiseQueryRepository.getLowestPriceCombinationByBrand(brand);
             BigDecimal totalPrice = priceAndCategorys.stream().map(GetPriceAndCategoryDto::getPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
-            lowestPriceCombinationByBrands.add(LowestPriceCombinationByBrandDto.builder()
+            lowestPriceCombinationByBrands.add(GetLowestPriceCombinationByBrandDto.builder()
                     .brand(brand)
                     .priceAndCategories(priceAndCategorys)
                     .totalPrice(totalPrice)
                     .build());
         }
         BigDecimal minimumTotal = lowestPriceCombinationByBrands.stream()
-                .map(LowestPriceCombinationByBrandDto::getTotalPrice)
+                .map(GetLowestPriceCombinationByBrandDto::getTotalPrice)
                 .min(Comparator.naturalOrder())
                 .orElse(BigDecimal.ZERO);
 

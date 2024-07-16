@@ -6,6 +6,8 @@ import com.musinsa.domain.merchandise.controller.MerchandiseController;
 import com.musinsa.domain.merchandise.dto.request.CreateMerchandiseRequestDto;
 import com.musinsa.domain.merchandise.dto.request.ModifyMerchandiseRequestDto;
 import com.musinsa.domain.merchandise.dto.response.CreateMerchandiseResponseDto;
+import com.musinsa.domain.merchandise.dto.response.GetCategoryHighestLowestPriceDto;
+import com.musinsa.domain.merchandise.dto.response.GetPriceAndBrandDto;
 import com.musinsa.domain.merchandise.dto.response.ModifyMerchandiseResponseDto;
 import com.musinsa.domain.merchandise.service.MerchandiseService;
 import com.musinsa.enumerable.Category;
@@ -20,8 +22,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -110,6 +114,31 @@ public class MerchandiseControllerTest {
 
         mockMvc.perform(delete("/merchandise/{id}", merchandiseId))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("카테고리 최대 최소 가격 조회 API")
+    void getLowestPriceCombinationTest() throws Exception {
+
+        Category category = Category.BAG;
+
+        List<GetPriceAndBrandDto> highestPriceMerchandises = List.of();
+        List<GetPriceAndBrandDto> lowestPriceMerchandises = List.of();
+
+        GetCategoryHighestLowestPriceDto responseDto = GetCategoryHighestLowestPriceDto.builder()
+                .highestPriceMerchandises(highestPriceMerchandises)
+                .lowestPriceMerchandises(lowestPriceMerchandises)
+                .build();
+
+        BDDMockito.given(merchandiseService.getCategoryHighestLowestPrice(category)).willReturn(responseDto);
+
+
+        mockMvc.perform(get("/merchandise/category/highest-lowest-price")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk());
+
+
     }
 
 }

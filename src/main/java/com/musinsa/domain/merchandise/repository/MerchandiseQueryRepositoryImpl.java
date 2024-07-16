@@ -1,8 +1,10 @@
 package com.musinsa.domain.merchandise.repository;
 
 import com.musinsa.domain.merchandise.dto.response.GetMerchandiseDto;
+import com.musinsa.domain.merchandise.dto.response.GetPriceAndBrandDto;
 import com.musinsa.domain.merchandise.dto.response.GetPriceAndCategoryDto;
 import com.musinsa.domain.merchandise.entity.QMerchandise;
+import com.musinsa.enumerable.Category;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
@@ -21,53 +23,52 @@ public class MerchandiseQueryRepositoryImpl implements MerchandiseQueryRepositor
     private final JPAQueryFactory jpaQueryFactory;
 
     public List<GetMerchandiseDto> getLowestPriceOfEachCategory() {
-        QMerchandise original = merchandise;
-        QMerchandise compare = new QMerchandise("compare");
+        QMerchandise subMerchandise = new QMerchandise("subMerchandise");
 
         return jpaQueryFactory
                 .select(
                         Projections.fields(
                                 GetMerchandiseDto.class,
-                                original.category,
-                                original.price.min().as("price"),
+                                merchandise.category,
+                                merchandise.price.min().as("price"),
                                 Expressions.stringTemplate(
                                         "GROUP_CONCAT({0})",
-                                        original.brand
+                                        merchandise.brand
                                 ).as("brand")
                         )
                 )
-                .from(original)
-                .where(original.price.eq(
-                        JPAExpressions.select(compare.price.min())
-                                .from(compare)
-                                .where(compare.category.eq(original.category))
+                .from(merchandise)
+                .where(merchandise.price.eq(
+                        JPAExpressions.select(subMerchandise.price.min())
+                                .from(subMerchandise)
+                                .where(subMerchandise.category.eq(merchandise.category))
                 ))
-                .groupBy(original.category)
+                .groupBy(merchandise.category)
                 .fetch();
     }
 
 
     @Override
     public List<GetPriceAndCategoryDto> getLowestPriceCombinationByBrand(String brand) {
-        QMerchandise original = merchandise;
-        QMerchandise compare = new QMerchandise("compare");
+        ;
+        QMerchandise subMerchandise = new QMerchandise("subMerchandise");
 
         return jpaQueryFactory
                 .select(
                         Projections.fields(
                                 GetPriceAndCategoryDto.class,
-                                original.category,
-                                original.price.min().as("price")
+                                merchandise.category,
+                                merchandise.price.min().as("price")
                         )
                 )
-                .from(original)
-                .where(original.price.eq(
-                        JPAExpressions.select(compare.price.min())
-                                .from(compare)
-                                .where(compare.category.eq(original.category),
-                                        compare.brand.eq(brand))
+                .from(merchandise)
+                .where(merchandise.price.eq(
+                        JPAExpressions.select(subMerchandise.price.min())
+                                .from(subMerchandise)
+                                .where(subMerchandise.category.eq(merchandise.category),
+                                        subMerchandise.brand.eq(brand))
                 ))
-                .groupBy(original.category)
+                .groupBy(merchandise.category)
                 .fetch();
     }
 
@@ -77,6 +78,46 @@ public class MerchandiseQueryRepositoryImpl implements MerchandiseQueryRepositor
                 .select(merchandise.brand)
                 .distinct()
                 .from(merchandise)
+                .fetch();
+    }
+
+    @Override
+    public List<GetPriceAndBrandDto> getHighestPriceByCategory(Category category) {
+        QMerchandise subMerchandise = new QMerchandise("subMerchandise");
+
+        return jpaQueryFactory
+                .select(Projections.fields(
+                        GetPriceAndBrandDto.class,
+                        merchandise.price.max().as("price"),
+                        merchandise.brand
+                ))
+                .from(merchandise)
+                .where(merchandise.price.eq(
+                                JPAExpressions.select(subMerchandise.price.max())
+                                        .from(subMerchandise)
+                                        .where(subMerchandise.category.eq(category)))
+                        .and(merchandise.category.eq(category)))
+                .groupBy(merchandise.brand)
+                .fetch();
+    }
+
+    @Override
+    public List<GetPriceAndBrandDto> getLowestPriceByCategory(Category category) {
+        QMerchandise subMerchandise = new QMerchandise("subMerchandise");
+
+        return jpaQueryFactory
+                .select(Projections.fields(
+                        GetPriceAndBrandDto.class,
+                        merchandise.price.min().as("price"),
+                        merchandise.brand
+                ))
+                .from(merchandise)
+                .where(merchandise.price.eq(
+                                JPAExpressions.select(subMerchandise.price.min())
+                                        .from(subMerchandise)
+                                        .where(subMerchandise.category.eq(category)))
+                        .and(merchandise.category.eq(category)))
+                .groupBy(merchandise.brand)
                 .fetch();
     }
 }
