@@ -89,6 +89,7 @@ response: x
 ## 실행방법
 - 빌드 : gradle >tasks> build> build
 - 테스트 : gradle > tasks> verificaiton> test
-- 실행 : com.musinsa.MusinsaApplication - test.main()
+- 실행 : com.musinsa.MssApplication 
+  - mss-test.main()
 
 
