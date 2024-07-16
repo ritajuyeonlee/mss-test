@@ -3,7 +3,7 @@ package com.mss.domain.merchandise.service;
 import com.mss.domain.merchandise.dto.request.CreateMerchandiseRequestDto;
 import com.mss.domain.merchandise.dto.request.ModifyMerchandiseRequestDto;
 import com.mss.domain.merchandise.dto.response.CreateMerchandiseResponseDto;
-import com.mss.domain.merchandise.dto.response.GetCategoryHighestLowestPriceDto;
+import com.mss.domain.merchandise.dto.response.GetCategoryHighestLowestPriceResponseDto;
 import com.mss.domain.merchandise.dto.response.ModifyMerchandiseResponseDto;
 import com.mss.domain.merchandise.entity.Merchandise;
 import com.mss.domain.merchandise.repository.MerchandiseQueryRepository;
@@ -49,8 +49,8 @@ public class MerchandiseService {
     }
 
     @Transactional(readOnly = true)
-    public GetCategoryHighestLowestPriceDto getCategoryHighestLowestPrice(Category category) {
-        return GetCategoryHighestLowestPriceDto.builder()
+    public GetCategoryHighestLowestPriceResponseDto getCategoryHighestLowestPrice(Category category) {
+        return GetCategoryHighestLowestPriceResponseDto.builder()
                 .highestPriceMerchandises(merchandiseQueryRepository.getHighestPriceByCategory(category))
                 .lowestPriceMerchandises(merchandiseQueryRepository.getLowestPriceByCategory(category))
                 .build();

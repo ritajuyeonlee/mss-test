@@ -3,7 +3,7 @@ package com.mss.domain.merchandise.controller;
 import com.mss.domain.merchandise.dto.request.CreateMerchandiseRequestDto;
 import com.mss.domain.merchandise.dto.request.ModifyMerchandiseRequestDto;
 import com.mss.domain.merchandise.dto.response.CreateMerchandiseResponseDto;
-import com.mss.domain.merchandise.dto.response.GetCategoryHighestLowestPriceDto;
+import com.mss.domain.merchandise.dto.response.GetCategoryHighestLowestPriceResponseDto;
 import com.mss.domain.merchandise.dto.response.ModifyMerchandiseResponseDto;
 import com.mss.domain.merchandise.service.MerchandiseService;
 import com.mss.enumerable.Category;
@@ -51,7 +51,7 @@ public class MerchandiseController {
 
     @GetMapping("/category/highest-lowest-price")
     @ResponseStatus(HttpStatus.OK)
-    public GetCategoryHighestLowestPriceDto getCategoryHighestLowestPrice(
+    public GetCategoryHighestLowestPriceResponseDto getCategoryHighestLowestPrice(
             Category category
     ) {
         return merchandiseService.getCategoryHighestLowestPrice(category);

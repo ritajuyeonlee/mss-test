@@ -8,7 +8,7 @@ import java.util.List;
 
 @Getter
 @Builder
-public class GetCategoryHighestLowestPriceDto {
+public class GetCategoryHighestLowestPriceResponseDto {
     List<GetPriceAndBrandDto> highestPriceMerchandises;
     List<GetPriceAndBrandDto> lowestPriceMerchandises;
 

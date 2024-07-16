@@ -6,7 +6,7 @@ import com.mss.domain.merchandise.controller.MerchandiseController;
 import com.mss.domain.merchandise.dto.request.CreateMerchandiseRequestDto;
 import com.mss.domain.merchandise.dto.request.ModifyMerchandiseRequestDto;
 import com.mss.domain.merchandise.dto.response.CreateMerchandiseResponseDto;
-import com.mss.domain.merchandise.dto.response.GetCategoryHighestLowestPriceDto;
+import com.mss.domain.merchandise.dto.response.GetCategoryHighestLowestPriceResponseDto;
 import com.mss.domain.merchandise.dto.response.GetPriceAndBrandDto;
 import com.mss.domain.merchandise.dto.response.ModifyMerchandiseResponseDto;
 import com.mss.domain.merchandise.service.MerchandiseService;
@@ -126,7 +126,7 @@ public class MerchandiseControllerTest {
         List<GetPriceAndBrandDto> highestPriceMerchandises = List.of();
         List<GetPriceAndBrandDto> lowestPriceMerchandises = List.of();
 
-        GetCategoryHighestLowestPriceDto responseDto = GetCategoryHighestLowestPriceDto.builder()
+        GetCategoryHighestLowestPriceResponseDto responseDto = GetCategoryHighestLowestPriceResponseDto.builder()
                 .highestPriceMerchandises(highestPriceMerchandises)
                 .lowestPriceMerchandises(lowestPriceMerchandises)
                 .build();
