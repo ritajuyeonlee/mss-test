@@ -33,6 +33,7 @@ public class MerchandiseService {
             ModifyMerchandiseRequestDto modifyMerchandiseRequestDto) {
 
         Merchandise merchandise = merchandiseRepository.findById(id).orElseThrow(MerchandiseNotExistException::new);
+        if(merchandise.getDeletedAt() != null) throw new MerchandiseNotExistException();
         merchandise.modify(modifyMerchandiseRequestDto);
 
         return ModifyMerchandiseResponseDto.builder()
@@ -45,6 +46,8 @@ public class MerchandiseService {
     @Transactional
     public void deleteMerchandise(Long id) {
         Merchandise merchandise = merchandiseRepository.findById(id).orElseThrow(MerchandiseNotExistException::new);
+        if(merchandise.getDeletedAt() != null) throw new MerchandiseNotExistException();
+
         merchandise.delete();
     }
 

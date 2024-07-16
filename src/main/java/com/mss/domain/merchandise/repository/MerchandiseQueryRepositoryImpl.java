@@ -39,10 +39,11 @@ public class MerchandiseQueryRepositoryImpl implements MerchandiseQueryRepositor
                 )
                 .from(merchandise)
                 .where(merchandise.price.eq(
-                        JPAExpressions.select(subMerchandise.price.min())
-                                .from(subMerchandise)
-                                .where(subMerchandise.category.eq(merchandise.category))
-                ))
+                                JPAExpressions.select(subMerchandise.price.min())
+                                        .from(subMerchandise)
+                                        .where(subMerchandise.category.eq(merchandise.category))
+                        ).and(merchandise.deletedAt.isNull())
+                )
                 .groupBy(merchandise.category)
                 .fetch();
     }
@@ -63,11 +64,12 @@ public class MerchandiseQueryRepositoryImpl implements MerchandiseQueryRepositor
                 )
                 .from(merchandise)
                 .where(merchandise.price.eq(
-                        JPAExpressions.select(subMerchandise.price.min())
-                                .from(subMerchandise)
-                                .where(subMerchandise.category.eq(merchandise.category),
-                                        subMerchandise.brand.eq(brand))
-                ))
+                                JPAExpressions.select(subMerchandise.price.min())
+                                        .from(subMerchandise)
+                                        .where(subMerchandise.category.eq(merchandise.category),
+                                                subMerchandise.brand.eq(brand))
+                        ).and(merchandise.deletedAt.isNull())
+                )
                 .groupBy(merchandise.category)
                 .fetch();
     }
@@ -78,6 +80,7 @@ public class MerchandiseQueryRepositoryImpl implements MerchandiseQueryRepositor
                 .select(merchandise.brand)
                 .distinct()
                 .from(merchandise)
+                .where(merchandise.deletedAt.isNull())
                 .fetch();
     }
 
@@ -96,7 +99,9 @@ public class MerchandiseQueryRepositoryImpl implements MerchandiseQueryRepositor
                                 JPAExpressions.select(subMerchandise.price.max())
                                         .from(subMerchandise)
                                         .where(subMerchandise.category.eq(category)))
-                        .and(merchandise.category.eq(category)))
+                        .and(merchandise.category.eq(category))
+                        .and(merchandise.deletedAt.isNull())
+                )
                 .groupBy(merchandise.brand)
                 .fetch();
     }
@@ -116,7 +121,9 @@ public class MerchandiseQueryRepositoryImpl implements MerchandiseQueryRepositor
                                 JPAExpressions.select(subMerchandise.price.min())
                                         .from(subMerchandise)
                                         .where(subMerchandise.category.eq(category)))
-                        .and(merchandise.category.eq(category)))
+                        .and(merchandise.category.eq(category))
+                        .and(merchandise.deletedAt.isNull())
+                )
                 .groupBy(merchandise.brand)
                 .fetch();
     }
