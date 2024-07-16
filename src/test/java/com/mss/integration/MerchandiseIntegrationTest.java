@@ -30,6 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional
 @AutoConfigureMockMvc
 @SpringBootTest
+@DisplayName("[통합테스트] 상품")
 public class MerchandiseIntegrationTest {
 
     @Autowired
@@ -41,7 +42,7 @@ public class MerchandiseIntegrationTest {
 
     @Order(1)
     @Test
-    @DisplayName("[통합테스트] 상품")
+    @DisplayName("상품 생성,수정,조회")
     void createMerchandise() {
         Category category = Category.BAG;
         BigDecimal price = BigDecimal.valueOf(1000);
