@@ -34,8 +34,8 @@ dependencies {
     implementation("com.querydsl:querydsl-apt:5.0.0")
     implementation("com.querydsl:querydsl-core:5.0.0")
     implementation("com.querydsl:querydsl-sql:5.0.0")
-    annotationProcessor( "com.querydsl:querydsl-apt:5.0.0:jakarta")
-    annotationProcessor( "jakarta.annotation:jakarta.annotation-api")
+    annotationProcessor("com.querydsl:querydsl-apt:5.0.0:jakarta")
+    annotationProcessor("jakarta.annotation:jakarta.annotation-api")
     annotationProcessor("jakarta.persistence:jakarta.persistence-api")
 
 
@@ -75,4 +75,8 @@ tasks.named<Delete>("clean") {
 
 tasks.withType<JavaCompile> {
     options.generatedSourceOutputDirectory.set(file(querydslSrcDir))
+}
+
+tasks.test {
+    systemProperty("file.encoding", "UTF-8")
 }
