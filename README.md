@@ -92,5 +92,7 @@ response: x
 - 실행 : com.mss.MssApplication 
   - mss-test.main()
   - java version 17
+  - 실행시 테스트 데이터 72개의 상품이 생성됩니다
+  - h2 database 사용
 
 
