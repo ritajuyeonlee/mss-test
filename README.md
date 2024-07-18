@@ -83,7 +83,7 @@ response: x
 - 상품 ID가 필요합니다
 
   
-### Unit test 구현 완료
+### Unit test 및 Integration 구현 완료
 
 
 ## 실행방법
